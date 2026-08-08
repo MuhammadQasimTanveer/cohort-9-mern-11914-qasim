@@ -1,1 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
+
+
+@theme {
+    
+  --color-primary: #6C63FF;
+  --color-primary-hover: #5A52E0;
+  --color-primary-light: #EEEDFE;
+  --color-accent: #F97316;
+  --color-accent-light: #FFF0E6;
+
+  --color-sidebar: #111111;
+  --color-sidebar-hover: #1E1E1E;
+  --color-sidebar-active: #2A2A2A;
+  
+  --color-surface: #FFFFFF;
+  --color-surface-secondary: #F8F7F5;
+  --color-surface-tertiary: #F0EEE9;
+
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B6B6B;
+  --color-text-muted: #9E9E9E;
+
+  --color-border-subtle: #E5E3DC;
+  --color-border-strong: #C9C7C0;
+
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  --font-sans: "DM Sans", ui-sans-serif, system-ui;
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular;
+}
+
+/* ── Base Layer ── */
+@layer base {
+
+  html {
+    @apply antialiased;
+    font-family: var(--font-sans);
+  }
+
+  body {
+    /* Using the theme variables defined above */
+    @apply bg-surface-secondary text-text-primary;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  h1 { @apply text-2xl font-semibold tracking-tight; }
+  h2 { @apply text-xl font-semibold tracking-tight; }
+  
+  /* Modern scrollbar styling (standard property) */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-strong) transparent;
+  }
+}
+
+
+/* ── Components Layer ── */
+@layer components {
+
+    .btn-primary {
+      @apply flex items-center justify-center gap-2 px-4 py-2 rounded-lg
+      text-sm font-medium transition-all duration-150 cursor-pointer
+      disabled:opacity-50 disabled:cursor-not-allowed bg-primary text-white hover:bg-primary-hover active:scale-95;
+    }
+  
+    .btn-secondary {
+      @apply bg-surface-tertiary text-text-primary hover:bg-border-subtle active:scale-95;
+    }
+
+    .btn-social {
+      @apply flex items-center justify-center gap-2 px-4 py-2 rounded-lg
+      text-sm font-normal transition-all duration-150 cursor-pointer
+      disabled:opacity-50 disabled:cursor-not-allowed w-full border border-border-subtle bg-white text-[#1A1A1A]
+      hover:bg-[#F8F7F5];
+    }
+  
+    /* Keep the rest of your components */
+    .input {
+      @apply w-full px-3 py-2.5 rounded-lg border border-border-subtle bg-white
+             text-sm text-text-primary outline-none
+             focus:ring-2 focus:ring-primary/20 focus:border-primary
+             transition-all duration-150;
+    }
+  
+    .card {
+      @apply bg-white rounded-xl border border-border-subtle shadow-sm;
+    }
+  
+    .sidebar-item {
+      @apply flex items-center gap-3 px-3 py-2 rounded-lg text-sm
+             text-text-muted hover:text-white hover:bg-sidebar-hover
+             transition-colors duration-150 cursor-pointer;
+    }
+  
+    .divider {
+      @apply flex items-center gap-3 text-xs text-text-muted;
+      &::before, &::after {
+        content: '';
+        @apply flex-1 border-t border-border-subtle;
+      }
+    }
+  }
