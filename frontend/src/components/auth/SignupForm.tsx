@@ -6,9 +6,15 @@ import {
 } from "../../lib/validations/authSchema";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
+import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
+import { useAuthStore } from '../../store/authStore';
 
 
 export const SignupForm = () => {
+
+  const { signup } = useAuthStore();
+  const navigate = useNavigate(); 
 
   const {
     register,
@@ -19,7 +25,13 @@ export const SignupForm = () => {
   });
 
   const onSubmit = async (data: SignupFormData) => {
-    console.log("You form has been submitted!");
+    try {
+      await signup(data.fullName, data.email, data.password);
+      toast.success('Welcome to our dashboard!');
+      navigate('/dashboard'); // Redirect on success
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
 
   return (

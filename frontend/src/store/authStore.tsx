@@ -1,18 +1,18 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import type { User } from '../types'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { authAPI } from '../api/auth';
+import type { User } from '../types';
 
 interface AuthState {
-  user: User | null
-  token: string | null
-  isAuthenticated: boolean
-  isLoading: boolean
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
 
-  login: (email: string, password: string) => Promise<void>
-  signup: (fullName: string, email: string, password: string) => Promise<void>
-  forgotPassword: (email: string) => Promise<void>
-  logout: () => void
-  setUser: (user: User) => void
+  login: (email: string, password: string) => Promise<void>;
+  signup: (fullName: string, email: string, password: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  logout: () => void;
+  setUser: (user: User) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -21,49 +21,59 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      isLoading: false,
 
       login: async (email, password) => {
-        set({ isLoading: true })
         try {
-          const response = await fetch('/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-          })
-
-          if (!response.ok) {
-            throw new Error('Login failed')
+          const { data } = await authAPI.login({ email, password });
+          if(data){
+            set({ 
+              user: data.user, 
+              token: data.token, 
+              isAuthenticated: true,
+            });
           }
-
-          const { user, token } = (await response.json()) as { user: User; token: string }
-          set({ user, token, isAuthenticated: true })
-        } finally {
-          set({ isLoading: false })
+        } catch (error: any) {
+          throw new Error(error.response?.data?.message || 'Login failed');
         }
-      },
+      },  
 
       signup: async (fullName, email, password) => {
-        set({ isLoading: true })
         try {
-          // TODO: call API
-        } finally {
-          set({ isLoading: false })
+          const { data } = await authAPI.register({ fullName, email, password });
+          set({ 
+            user: data.user, 
+            token: data.token, 
+            isAuthenticated: true,
+          });
+        } catch (error: any) {
+          throw new Error(error.response?.data?.message || 'Signup failed');
         }
       },
 
       forgotPassword: async (email) => {
-        set({ isLoading: true })
         try {
-          // TODO: call API
-        } finally {
-          set({ isLoading: false })
+          await authAPI.forgotPassword({ email });
+        } catch (error: any) {
+          throw new Error(error.response?.data?.message || 'Login failed');
         }
       },
 
-      logout: () => set({ user: null, token: null, isAuthenticated: false }),
+      logout: () => {
+        // Clear token from axios headers
+        localStorage.removeItem('accessToken');
+        set({ user: null, token: null, isAuthenticated: false });
+      },
+
       setUser: (user) => set({ user }),
+      
     }),
-    { name: 'auth-storage', partialize: (s) => ({ token: s.token, user: s.user }) }
+    { 
+      name: 'auth-storage', 
+      partialize: (state) => ({ 
+        token: state.token, 
+        user: state.user,
+        isAuthenticated: state.isAuthenticated 
+      }),
+    }
   )
-)
+);

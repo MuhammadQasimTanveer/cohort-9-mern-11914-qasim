@@ -5,7 +5,7 @@ export const authAPI = {
     axiosInstance.post('/auth/login', data),
   
   register: (data: { fullName: string; email: string; password: string }) => 
-    axiosInstance.post('/auth/register', data),
+    axiosInstance.post('/auth/signup', data),
   
   forgotPassword: (data: { email: string }) => 
     axiosInstance.post('/auth/forgot-password', data),

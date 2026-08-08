@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -6,9 +7,16 @@ import {
 } from "../../lib/validations/authSchema";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
+import { useAuthStore } from '../../store/authStore';
+
 
 export const LoginForm = () => {
+
+  const { login, isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -18,8 +26,21 @@ export const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log("You form has been submitted!");
+    try {
+      await login(data.email, data.password);
+      toast.success('Welcome back!');
+      navigate('/dashboard'); // Redirect on success
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
