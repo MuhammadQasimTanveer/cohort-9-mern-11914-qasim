@@ -45,6 +45,22 @@ export const SignupForm = () => {
         error={errors.password?.message}
         {...register("password")}
       />
+      <div>
+      <div className="flex items-center gap-2">
+        <input
+          id="agreeToTerms"
+          type="checkbox"
+          className="h-4 w-4"
+          {...register("agreeToTerms")}
+        />
+        <label htmlFor="agreeToTerms" className="text-sm text-gray-600">
+          I agree to the Terms of Service and Privacy Policy
+        </label>
+      </div>
+      {errors.agreeToTerms && (
+        <p className="form-error">{errors.agreeToTerms.message}</p>
+      )}
+    </div>
 
       <Button type="submit" isLoading={isSubmitting} className="w-full mt-2">
         Create Account

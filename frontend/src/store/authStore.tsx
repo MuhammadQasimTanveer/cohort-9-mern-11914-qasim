@@ -10,6 +10,7 @@ interface AuthState {
 
   login: (email: string, password: string) => Promise<void>
   signup: (fullName: string, email: string, password: string) => Promise<void>
+  forgotPassword: (email: string) => Promise<void>
   logout: () => void
   setUser: (user: User) => void
 }
@@ -43,6 +44,15 @@ export const useAuthStore = create<AuthState>()(
       },
 
       signup: async (fullName, email, password) => {
+        set({ isLoading: true })
+        try {
+          // TODO: call API
+        } finally {
+          set({ isLoading: false })
+        }
+      },
+
+      forgotPassword: async (email) => {
         set({ isLoading: true })
         try {
           // TODO: call API
