@@ -9,7 +9,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "test": "mocha"
+    "test": "tsx ./node_modules/mocha/bin/mocha \"test/**/*.test.ts\""
   },
   "keywords": [],
   "author": "",
