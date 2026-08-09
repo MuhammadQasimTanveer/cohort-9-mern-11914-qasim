@@ -3,9 +3,7 @@ import bcrypt from "bcryptjs";
 import { login, signup } from "../controllers/auth.controller.js";
 import { User } from "../models/user.model.js";
 
-type MockResponse = {
-  statusCode: number;
-  body: any;
+type MockResponse = { statusCode: number; body: any;
   status: (code: number) => MockResponse;
   json: (payload: any) => MockResponse;
 };
@@ -23,10 +21,8 @@ const createMockResponse = (): MockResponse => {
       return this;
     },
   };
-
   return res;
 };
-
 const originalFindOne = User.findOne;
 const originalCreate = User.create;
 
@@ -46,16 +42,13 @@ describe("Auth Controller", () => {
         body: { fullName: "", email: "john@example.com", password: "Password1" },
       } as any;
       const res = createMockResponse();
-
       await signup(req, res as any);
-
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.deep.equal({ message: "All fields are required!" });
     });
 
     it("should return 400 when user already exists", async () => {
       User.findOne = (async () => ({ _id: "existing-user-id" })) as any;
-
       const req = {
         body: { fullName: "John Doe", email: "john@example.com", password: "Password1" },
       } as any;
@@ -94,7 +87,6 @@ describe("Auth Controller", () => {
       expect(String(res.body.user.id)).to.equal("new-user-id");
     });
   });
-
   describe("login", () => {
     it("should return 400 when required fields are missing", async () => {
       const req = { body: { email: "", password: "" } } as any;
@@ -113,7 +105,6 @@ describe("Auth Controller", () => {
       const res = createMockResponse();
 
       await login(req, res as any);
-
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.deep.equal({ message: "Invalid credentials" });
     });
@@ -134,8 +125,7 @@ describe("Auth Controller", () => {
       expect(res.statusCode).to.equal(400);
       expect(res.body).to.deep.equal({ message: "Invalid credentials" });
     });
-
-    it("should return token + user payload for valid credentials", async () => {
+    it("should return token plus user payload for valid credentials", async () => {
       const hashedPassword = await bcrypt.hash("Password1", 10);
       User.findOne = (async () => ({
         _id: { toString: () => "user-id" },
@@ -143,12 +133,9 @@ describe("Auth Controller", () => {
         email: "john@example.com",
         password: hashedPassword,
       })) as any;
-
       const req = { body: { email: "john@example.com", password: "Password1" } } as any;
       const res = createMockResponse();
-
       await login(req, res as any);
-
       expect(res.statusCode).to.equal(201);
       expect(res.body).to.have.property("token").that.is.a("string");
       expect(res.body.user.fullName).to.equal("John Doe");
