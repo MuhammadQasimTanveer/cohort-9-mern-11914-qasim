@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes, forwardRef } from 'react'
+import { type InputHTMLAttributes, forwardRef, useId } from 'react'
 import { cn } from '../../lib/helpers'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -9,9 +9,16 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, leftIcon, className, ...props }, ref) => {
+    const generatedId = useId()
+    const inputId = props.id ?? generatedId
+
     return (
       <div className="form-field">
-        {label && <label className="form-label">{label}</label>}
+        {label && (
+          <label htmlFor={inputId} className="form-label">
+            {label}
+          </label>
+        )}
         <div className="relative">
           {leftIcon && (
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9E9E9E]">
@@ -20,6 +27,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
           <input
             ref={ref}
+            id={inputId}
             className={cn(
               'input',
               leftIcon && 'pl-9',
@@ -29,7 +37,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
         </div>
-        {error && <p className="form-error">{error}</p>}
+        {error && <p role="error" className="form-error">{error}</p>}
       </div>
     )
   }
