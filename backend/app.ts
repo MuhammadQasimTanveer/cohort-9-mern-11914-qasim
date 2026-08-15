@@ -3,6 +3,7 @@ import cors from 'cors';
 import { logger } from './utils/logger';
 import pinoHttp from 'pino-http';
 import authRoutes from "./routes/auth.routes";
+import notesRoutes from "./routes/notes.routes";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(pinoHttp({ logger }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/notes', notesRoutes);
 
 // Global Error Handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
