@@ -1,12 +1,22 @@
-import { FiArrowLeft, FiMoreHorizontal, FiShare2, FiStar } from 'react-icons/fi'
+import { FiArrowLeft, FiMoreHorizontal } from 'react-icons/fi'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { BiCheckDouble } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
+import type { SaveStatus } from '../../../hooks/useDebouncedAutoSave'
 
 interface NotesEditorHeaderProps {
   title: string
   onTitleChange: (value: string) => void
+  lastEdited?: string
+  saveStatus: SaveStatus
 }
 
-export const NotesEditorHeader = ({ title, onTitleChange }: NotesEditorHeaderProps) => {
+export const NotesEditorHeader = ({
+  title,
+  onTitleChange,
+  lastEdited,
+  saveStatus,
+}: NotesEditorHeaderProps) => {
   return (
     <header className="flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -21,13 +31,19 @@ export const NotesEditorHeader = ({ title, onTitleChange }: NotesEditorHeaderPro
       </div>
 
       <div className="flex items-center gap-3 text-sm text-text-secondary">
-        <span className="hidden sm:inline">Last edited 2h ago</span>
-        <button type="button" className="flex items-center gap-1 rounded-md px-2 py-1 hover:bg-surface-secondary">
-          <FiShare2 /> Share
-        </button>
-        <button type="button" className="rounded-md p-2 hover:bg-surface-secondary" aria-label="Favorite note">
-          <FiStar />
-        </button>
+        <span className="hidden sm:inline">{lastEdited ?? 'Last edited just now'}</span>
+
+        {saveStatus === 'saving' ? (
+          <span className="flex items-center gap-1 rounded-md px-2 py-1">
+            <AiOutlineLoading3Quarters className="animate-spin" />
+            Saving
+          </span>
+        ) :  <span className="flex items-center gap-1 rounded-md px-2 py-1 text-emerald-6  00">
+              <BiCheckDouble />
+              Saved
+            </span>
+        }
+
         <button type="button" className="rounded-md p-2 hover:bg-surface-secondary" aria-label="More actions">
           <FiMoreHorizontal />
         </button>

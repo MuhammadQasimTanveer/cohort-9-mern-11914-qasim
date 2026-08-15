@@ -36,6 +36,15 @@ const App = () => {
         />
 
         <Route
+          path="/dashboard/notes/:noteId"
+          element={
+            <ProtectedRoute>
+              <NotesEditorPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/dashboard"
           element={
             <ProtectedRoute>

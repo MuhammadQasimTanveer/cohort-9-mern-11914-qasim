@@ -1,5 +1,6 @@
 import { FiMoreVertical } from 'react-icons/fi'
 import type { Note } from '../../types/note.types'
+import { formatRelativeUpdatedAt } from '../../lib/noteHelpers'
 
 interface RecentNotesProps {
   notes: Note[]
@@ -27,7 +28,7 @@ export const RecentNotes = ({ notes }: RecentNotesProps) => {
           <div key={note.id} className="flex items-center justify-between p-3 ps-0">
             <div>
               <p className="text-sm font-medium text-text-primary">{note.title}</p>
-              <p className="text-xs text-text-muted">{note.updatedAt}</p>
+              <p className="text-xs text-text-muted">{formatRelativeUpdatedAt(note.updatedAt)}</p>
             </div>
             <span className={`rounded-full px-2 py-1 text-xs font-medium ${tagClasses[note.tag] ?? 'bg-slate-100 text-slate-700'}`}>
               {note.tag}

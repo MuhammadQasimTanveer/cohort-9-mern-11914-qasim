@@ -1,6 +1,8 @@
 export interface Note {
   id: string
   title: string
+  content: Record<string, unknown>
+  createdAt: string
   updatedAt: string
   tag: string
 }
