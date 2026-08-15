@@ -1,7 +1,7 @@
 import { Button } from "../components/ui/Button";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png"
 
 type AuthMode = "login" | "signup";
 
@@ -18,10 +18,8 @@ export const AuthLayout = ({ mode, children }: AuthLayoutProps) => {
       <div className="card w-full max-w-md p-8">
         {/* Logo */}
         <div className="flex justify-center items-center gap-2 mb-8">
-          <div className="w-7 h-7 bg-text-primary rounded-md flex items-center justify-center">
-            <span className="text-white text-xs font-bold">M</span>
-          </div>
-          <span className="font-semibold text-sm">mystuff</span>
+          <img src={logo} alt="web-logo" width="28px" />
+          <span className="font-semibold text-lg">mystuff</span>
         </div>
 
         {/* Heading */}
