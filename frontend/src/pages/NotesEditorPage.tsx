@@ -3,16 +3,27 @@ import { NotesDetailsPanel } from '../components/notes/editor/NotesDetailsPanel'
 import { NotesEditorCanvas } from '../components/notes/editor/NotesEditorCanvas'
 import { NotesEditorHeader } from '../components/notes/editor/NotesEditorHeader'
 import { useNoteEditor } from '../hooks/useNoteEditor'
+import { useSettingsStore } from '../store/settingsStore'
 
 export const NotesEditorPage = () => {
+  const showWordCount = useSettingsStore((state) => state.showWordCount)
   const {
     editor,
     saveStatus,
+    autosaveEnabled,
+    hasUnsavedChanges,
     lastEdited,
+    isManualSaving,
     isDetailsOpen,
+    isExitPromptOpen,
+    isSavingBeforeExit,
     setIsDetailsOpen,
+    setIsExitPromptOpen,
     setTitle,
     setTag,
+    handleBack,
+    handleManualSave,
+    handleSaveAndExit,
     handleContentChange,
   } = useNoteEditor()
 
@@ -40,6 +51,11 @@ export const NotesEditorPage = () => {
           onTitleChange={setTitle}
           lastEdited={lastEdited}
           saveStatus={saveStatus}
+          autosaveEnabled={autosaveEnabled}
+          hasUnsavedChanges={hasUnsavedChanges}
+          onBack={handleBack}
+          onManualSave={handleManualSave}
+          isManualSaveLoading={isManualSaving}
         />
 
         <div className="flex items-start gap-4">
@@ -61,6 +77,7 @@ export const NotesEditorPage = () => {
               createdAt={editor.createdAt}
               updatedAt={editor.updatedAt}
               plainText={editor.plainText}
+              showWordCount={showWordCount}
             />
           ) : null}
         </div>
@@ -70,13 +87,41 @@ export const NotesEditorPage = () => {
             <button
               type="button"
               onClick={() => setIsDetailsOpen(true)}
-              className="flex items-center gap-2 rounded-lg border border-border-subtle bg-white px-3 py-2 text-sm text-text-secondary cursor-pointer hover:bg-surface"
+              className="flex items-center gap-2 rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-secondary cursor-pointer hover:bg-surface-secondary"
             >
               <FiSidebar /> Open Details Panel
             </button>
           </div>
         ) : null}
       </div>
+
+      {isExitPromptOpen ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-xl border border-border-subtle bg-surface p-5 shadow-lg">
+            <h3 className="text-base font-semibold text-text-primary">Unsaved changes</h3>
+            <p className="mt-2 text-sm text-text-secondary">
+              You have unsaved note changes. Save before leaving?
+            </p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setIsExitPromptOpen(false)}
+                className="rounded-lg border border-border-subtle px-3 py-2 text-sm text-text-secondary hover:bg-surface-secondary"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveAndExit}
+                disabled={isSavingBeforeExit}
+                className="rounded-lg bg-primary px-3 py-2 text-sm text-white disabled:opacity-60"
+              >
+                {isSavingBeforeExit ? 'Saving...' : 'Save & Exit'}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

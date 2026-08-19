@@ -8,7 +8,7 @@ export const DashLayout = () => {
   return (
     <div className="flex h-screen w-full overflow-hidden bg-surface">
       <aside
-        className={`fixed left-0 top-0 h-screen border-r border-border-subtle bg-[#fbfbfb] p-4 transition-all duration-200 ${
+        className={`fixed left-0 top-0 h-screen border-r border-border-subtle bg-surface p-4 transition-all duration-200 ${
           isCollapsed ? 'w-[74px]' : 'w-[250px]'
         }`}
       >

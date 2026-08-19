@@ -19,7 +19,7 @@ export const DashboardHeader = ({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div>
-        <h1 className="text-3xl font-semibold text-text-primary mb-2">{title}👋</h1>
+        <h1 className="text-3xl font-semibold text-text-primary mb-2">{title}</h1>
         {subtitle ? <p className="text-sm text-text-secondary">{subtitle}</p> : null}
       </div>
       {actionLabel ? (

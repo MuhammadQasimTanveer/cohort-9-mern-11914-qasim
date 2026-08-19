@@ -14,6 +14,7 @@ interface NotesDetailsPanelProps {
   createdAt: string
   updatedAt: string
   plainText: string
+  showWordCount: boolean
 }
 
 const tagClasses: Record<string, string> = {
@@ -31,6 +32,7 @@ export const NotesDetailsPanel = ({
   createdAt,
   updatedAt,
   plainText,
+  showWordCount,
 }: NotesDetailsPanelProps) => {
   const [isAddingTag, setIsAddingTag] = useState(false)
   const [tagInput, setTagInput] = useState('')
@@ -63,7 +65,7 @@ export const NotesDetailsPanel = ({
   }
 
   return (
-    <aside className="w-full rounded-xl border border-border-subtle bg-white p-4 xl:w-[320px]">
+    <aside className="w-full rounded-xl border border-border-subtle bg-surface p-4 xl:w-[320px]">
       <div className="flex items-center justify-between border-b border-border-subtle pb-2">
         <div className="flex items-center gap-3">
           <button type="button" className="text-sm font-semibold text-text-primary">Document</button>
@@ -135,7 +137,7 @@ export const NotesDetailsPanel = ({
         <section className="space-y-2 text-text-secondary">
           <div className="flex justify-between"><span>Created</span><span>{formatNoteDate(createdAt)}</span></div>
           <div className="flex justify-between"><span>Updated</span><span>{formatNoteDate(updatedAt)}</span></div>
-          <div className="flex justify-between"><span>Word count</span><span>{wordCount}</span></div>
+          {showWordCount ? <div className="flex justify-between"><span>Word count</span><span>{wordCount}</span></div> : null}
           <div className="flex justify-between"><span>Read time</span><span>{readTime}</span></div>
         </section>
       </div>

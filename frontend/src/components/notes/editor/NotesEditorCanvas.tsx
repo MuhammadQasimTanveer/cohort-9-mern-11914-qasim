@@ -63,7 +63,7 @@ export const NotesEditorCanvas = ({ content, onContentChange }: NotesEditorCanva
   }, [content, editor])
 
   return (
-    <section className="w-full min-h-[90vh] rounded-xl border border-border-subtle bg-white">
+    <section className="w-full min-h-[90vh] rounded-xl border border-border-subtle bg-surface">
       <NotesEditorToolbar editor={editor} />
       <EditorContent editor={editor} className="tiptap" />
     </section>

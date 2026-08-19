@@ -107,7 +107,7 @@ export const NotesEditorToolbar = ({
 
   return (
     <>
-      <div className="sticky top-0 z-40 flex flex-wrap items-center gap-1 border-b border-border-subtle bg-white px-4 py-3">
+      <div className="sticky top-0 z-40 flex flex-wrap items-center gap-1 border-b border-border-subtle bg-surface px-4 py-3">
 
         {/* Hidden Upload Input */}
         <input

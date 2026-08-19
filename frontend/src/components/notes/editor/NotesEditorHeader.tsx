@@ -1,14 +1,19 @@
 import { FiArrowLeft, FiMoreHorizontal } from 'react-icons/fi'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { BiCheckDouble } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
 import type { SaveStatus } from '../../../hooks/useDebouncedAutoSave'
+import { Button } from '../../ui/Button'
 
 interface NotesEditorHeaderProps {
   title: string
   onTitleChange: (value: string) => void
   lastEdited?: string
   saveStatus: SaveStatus
+  autosaveEnabled: boolean
+  hasUnsavedChanges: boolean
+  onBack: () => void
+  onManualSave: () => void
+  isManualSaveLoading: boolean
 }
 
 export const NotesEditorHeader = ({
@@ -16,13 +21,23 @@ export const NotesEditorHeader = ({
   onTitleChange,
   lastEdited,
   saveStatus,
+  autosaveEnabled,
+  hasUnsavedChanges,
+  onBack,
+  onManualSave,
+  isManualSaveLoading,
 }: NotesEditorHeaderProps) => {
   return (
     <header className="flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <Link to="/dashboard/notes" className="rounded-md p-2 text-text-secondary hover:bg-surface-secondary hover:text-text-primary">
+        <button
+          type="button"
+          onClick={onBack}
+          className="rounded-md p-2 text-text-secondary hover:bg-surface-secondary hover:text-text-primary"
+          aria-label="Back to notes"
+        >
           <FiArrowLeft />
-        </Link>
+        </button>
         <input
           value={title}
           onChange={(event) => onTitleChange(event.target.value)}
@@ -38,11 +53,25 @@ export const NotesEditorHeader = ({
             <AiOutlineLoading3Quarters className="animate-spin" />
             Saving
           </span>
-        ) :  <span className="flex items-center gap-1 rounded-md px-2 py-1 text-emerald-6  00">
+        ) : saveStatus === 'saved' ? (
+          <span className="flex items-center gap-1 rounded-md px-2 py-1 text-emerald-600">
               <BiCheckDouble />
               Saved
             </span>
-        }
+        ) 
+       : null}
+
+        {!autosaveEnabled ? (
+          <Button
+            type="button"
+            onClick={onManualSave}
+            isLoading={isManualSaveLoading}
+            disabled={!hasUnsavedChanges}
+            className="px-3 py-2"
+          >
+            Save
+          </Button>
+        ) : null}
 
         <button type="button" className="rounded-md p-2 hover:bg-surface-secondary" aria-label="More actions">
           <FiMoreHorizontal />

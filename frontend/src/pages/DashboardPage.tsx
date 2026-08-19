@@ -17,7 +17,7 @@ export const DashboardPage = () => {
   return (
     <div className="space-y-10">
       <DashboardHeader
-        title={`Good morning, ${firstName}`}
+        title={`Good morning, ${firstName} 👋`}
         subtitle="Here's what's happening with your workspace today."
         actionLabel="New"
         onActionClick={handleCreateNote}
