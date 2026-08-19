@@ -6,9 +6,16 @@ interface DashboardHeaderProps {
   subtitle?: string
   actionLabel?: string
   onActionClick?: () => void
+  isActionLoading?: boolean
 }
 
-export const DashboardHeader = ({ title, subtitle, actionLabel, onActionClick }: DashboardHeaderProps) => {
+export const DashboardHeader = ({
+  title,
+  subtitle,
+  actionLabel,
+  onActionClick,
+  isActionLoading,
+}: DashboardHeaderProps) => {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div>
@@ -16,7 +23,11 @@ export const DashboardHeader = ({ title, subtitle, actionLabel, onActionClick }:
         {subtitle ? <p className="text-sm text-text-secondary">{subtitle}</p> : null}
       </div>
       {actionLabel ? (
-        <Button className="px-4 py-3 text-md font-light" onClick={onActionClick}>
+        <Button
+          className="px-4 py-3 text-md font-light"
+          onClick={onActionClick}
+          isLoading={isActionLoading}
+        >
           <FiPlus /> {actionLabel}
         </Button>
       ) : null}

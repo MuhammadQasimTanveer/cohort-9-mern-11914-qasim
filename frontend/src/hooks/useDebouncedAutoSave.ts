@@ -6,12 +6,16 @@ interface UseDebouncedAutoSaveOptions<T> {
   data: T
   onSave: (data: T) => Promise<void>
   delay?: number
+  enabled?: boolean
+  resetKey?: string
 }
 
 export const useDebouncedAutoSave = <T>({
   data,
   onSave,
   delay = 1500,
+  enabled = true,
+  resetKey,
 }: UseDebouncedAutoSaveOptions<T>) => {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
   const [lastSavedAt, setLastSavedAt] = useState<string | null>(null)
@@ -21,11 +25,19 @@ export const useDebouncedAutoSave = <T>({
 
   onSaveRef.current = onSave
 
+  useEffect(() => {
+    isFirstRender.current = true
+  }, [resetKey])
+
   const stableSave = useCallback(async (payload: T) => {
     await onSaveRef.current(payload)
   }, [])
 
   useEffect(() => {
+    if (!enabled) {
+      return
+    }
+
     if (isFirstRender.current) {
       isFirstRender.current = false
       return
@@ -52,7 +64,7 @@ export const useDebouncedAutoSave = <T>({
     }, delay)
 
     return () => window.clearTimeout(timer)
-  }, [data, delay, stableSave])
+  }, [data, delay, stableSave, enabled])
 
   return { saveStatus, lastSavedAt }
 }

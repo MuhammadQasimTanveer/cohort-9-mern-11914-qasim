@@ -1,9 +1,8 @@
 import { FiGrid, FiList, FiPlus, FiSearch } from 'react-icons/fi'
-import { useNavigate } from 'react-router-dom'
+import { useCreateNote } from '../../hooks/useCreateNote'
+import type { NotesViewMode } from '../../store/notesStore'
 import { Button } from '../ui/Button'
 import { cn } from '../../lib/helpers'
-
-type NotesViewMode = 'grid' | 'list'
 
 interface NotesHeaderProps {
   query: string
@@ -18,7 +17,7 @@ export const NotesHeader = ({
   onQueryChange,
   onViewModeChange,
 }: NotesHeaderProps) => {
-  const navigate = useNavigate()
+  const { handleCreateNote, isCreating } = useCreateNote()
 
   return (
     <div className="space-y-4">
@@ -26,7 +25,11 @@ export const NotesHeader = ({
         <div>
           <h1 className="text-3xl font-semibold text-text-primary mb-2">My Notes</h1>
         </div>
-        <Button className="px-4 py-3 text-md font-light" onClick={() => navigate('/dashboard/notes/new')}>
+        <Button
+          className="px-4 py-3 text-md font-light"
+          onClick={handleCreateNote}
+          isLoading={isCreating}
+        >
           Add Note <FiPlus />
         </Button>
       </div>

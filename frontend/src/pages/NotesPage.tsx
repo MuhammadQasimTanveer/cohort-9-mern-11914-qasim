@@ -1,31 +1,9 @@
-import { useMemo, useState } from 'react'
 import { NotesHeader } from '../components/notes/NotesHeader'
 import { NotesList } from '../components/notes/NotesList'
-import { mockNotes } from '../data/mockNotes'
+import { useNotesList } from '../hooks/useNotesList'
 
 export const NotesPage = () => {
-  const [notes, setNotes] = useState(mockNotes)
-  const [query, setQuery] = useState('')
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list')
-
-  const filteredNotes = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase()
-
-    if (!normalizedQuery) {
-      return notes
-    }
-
-    return notes.filter((note) => {
-      return (
-        note.title.toLowerCase().includes(normalizedQuery) ||
-        note.tag.toLowerCase().includes(normalizedQuery)
-      )
-    })
-  }, [notes, query])
-
-  const handleDeleteNote = (noteId: string) => {
-    setNotes((currentNotes) => currentNotes.filter((note) => note.id !== noteId))
-  }
+  const { notes, listLoading, query, viewMode, setQuery, setViewMode, deleteNote } = useNotesList()
 
   return (
     <div className="space-y-4">
@@ -35,7 +13,14 @@ export const NotesPage = () => {
         onQueryChange={setQuery}
         onViewModeChange={setViewMode}
       />
-      <NotesList notes={filteredNotes} viewMode={viewMode} onDeleteNote={handleDeleteNote} />
+
+      {listLoading ? (
+        <p className="text-sm text-text-muted">Loading notes...</p>
+      ) : notes.length === 0 ? (
+        <p className="text-sm text-text-muted">No notes found.</p>
+      ) : (
+        <NotesList notes={notes} viewMode={viewMode} onDeleteNote={deleteNote} />
+      )}
     </div>
   )
 }

@@ -26,6 +26,3 @@ export const mockProjects: ProjectItem[] = [
   { id: 'proj-3', name: 'CRM Migration', status: 'On Hold', owner: 'Engineering' },
 ]
 
-import { mockNotes } from './mockNotes'
-
-export const mockRecentNotes = mockNotes.slice(0, 3)

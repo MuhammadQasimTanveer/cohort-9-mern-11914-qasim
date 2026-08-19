@@ -1,21 +1,32 @@
 import { DashboardHeader } from '../components/dashboard/DashboardHeader'
 import { DashboardStats } from '../components/dashboard/DashboardStats'
 import { RecentNotes } from '../components/dashboard/RecentNotes'
-import { TasksPreview } from '../components/dashboard/TasksPreview'
-import { mockRecentNotes, mockStats, mockTasks } from '../data/mockStats'
+import { useCreateNote } from '../hooks/useCreateNote'
+import { useDashboardStats } from '../hooks/useDashboardStats'
+import { useRecentNotes } from '../hooks/useRecentNotes'
+import { getFirstName } from '../lib/userHelpers'
+import { useAuthStore } from '../store/authStore'
 
 export const DashboardPage = () => {
+  const user = useAuthStore((state) => state.user)
+  const { recentNotes } = useRecentNotes()
+  const stats = useDashboardStats()
+  const { handleCreateNote, isCreating } = useCreateNote()
+  const firstName = getFirstName(user?.fullName)
+
   return (
     <div className="space-y-10">
       <DashboardHeader
-        title="Good morning, Zami"
+        title={`Good morning, ${firstName}`}
         subtitle="Here's what's happening with your workspace today."
         actionLabel="New"
+        onActionClick={handleCreateNote}
+        isActionLoading={isCreating}
       />
-      <DashboardStats stats={mockStats} />
-      <section className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <RecentNotes notes={mockRecentNotes} />
-        <TasksPreview tasks={mockTasks} />
+      <DashboardStats stats={stats} />
+      <section className="grid grid-cols-1">
+        <RecentNotes notes={recentNotes} />
+        {/* <TasksPreview tasks={mockTasks} /> */}
       </section>
     </div>
   )

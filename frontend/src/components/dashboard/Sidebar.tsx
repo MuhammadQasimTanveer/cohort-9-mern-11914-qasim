@@ -8,6 +8,8 @@ import {
 } from 'react-icons/fi'
 import { NavLink } from 'react-router-dom'
 import logo from '../../assets/logo.png'
+import { getUserInitials } from '../../lib/userHelpers'
+import { useAuthStore } from '../../store/authStore'
 
 interface SidebarProps {
   isCollapsed: boolean
@@ -59,6 +61,11 @@ const SidebarLink = ({ to, label, Icon, isCollapsed, className = '' }: SidebarLi
 }
 
 export const Sidebar = ({ isCollapsed, onToggleCollapse }: SidebarProps) => {
+  const user = useAuthStore((state) => state.user)
+  const displayName = user?.fullName?.trim() || 'User'
+  const displayEmail = user?.email || ''
+  const initials = getUserInitials(user?.fullName)
+
   return (
     <div className="flex h-full flex-col">
       <div>
@@ -108,11 +115,11 @@ export const Sidebar = ({ isCollapsed, onToggleCollapse }: SidebarProps) => {
 
       <div className={`mt-auto border-t border-border-subtle pt-3 ${isCollapsed ? 'flex justify-center' : ''}`}>
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-white">ZH</div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-white">{initials}</div>
           {!isCollapsed ? (
             <div>
-              <p className="text-sm font-semibold text-text-primary">Zami Holmes</p>
-              <p className="text-xs text-text-muted">Product Designer</p>
+              <p className="text-sm font-semibold text-text-primary">{displayName}</p>
+              <p className="text-xs text-text-muted">{displayEmail}</p>
             </div>
           ) : null}
         </div>
